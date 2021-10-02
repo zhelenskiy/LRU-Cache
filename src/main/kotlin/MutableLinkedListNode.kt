@@ -31,7 +31,7 @@ private class MutableLinkedListNode<E>(
     }
 
     private fun validatePair(previous: MutableLinkedListNode<E>?, next: MutableLinkedListNode<E>?) {
-        require(previous != next)
+        require(previous == null || previous != next)
         require(previous == null || previous.next == next)
         require(next == null || next.previous == previous)
     }
@@ -71,23 +71,21 @@ internal class ExposingLinkedList<E> : Iterable<LinkedListNode<E>> {
         require(last?.next == null)
     }
 
-    fun addAfterLast(value: E) {
-        add(value) { lastImpl = lastImpl!!.addAfter(value) }
+    fun addAfterLast(value: E): LinkedListNode<E> =
+        add(value) { lastImpl!!.addAfter(value).also { lastImpl = it } }
+
+    private inline fun add(value: E, crossinline onNonEmpty: () -> LinkedListNode<E>): LinkedListNode<E> {
+        invariant()
+        val res = if (last != null) onNonEmpty() else MutableLinkedListNode(value, null, null).also {
+            firstImpl = it
+            lastImpl = it
+        }
+        invariant()
+        return res
     }
 
-    private inline fun add(value: E, crossinline onNonEmpty: () -> Unit) {
-        invariant()
-        if (last == null) {
-            val newNode = MutableLinkedListNode(value, null, null)
-            firstImpl = newNode
-            lastImpl = newNode
-        } else onNonEmpty()
-        invariant()
-    }
-
-    fun addBeforeFirst(value: E) {
-        add(value) { firstImpl = firstImpl!!.addBefore(value) }
-    }
+    fun addBeforeFirst(value: E): LinkedListNode<E> =
+        add(value) { firstImpl!!.addBefore(value).also { firstImpl = it } }
 
     override fun iterator(): Iterator<LinkedListNode<E>> = first?.iterator() ?: iterator { }
 
@@ -95,7 +93,7 @@ internal class ExposingLinkedList<E> : Iterable<LinkedListNode<E>> {
         invariant()
         val newFirst = if (node == firstImpl) firstImpl?.next else firstImpl
         val newLast = if (node == lastImpl) lastImpl?.previous else lastImpl
-        when (node){
+        when (node) {
             is MutableLinkedListNode -> node.remove()
         }
         firstImpl = newFirst
