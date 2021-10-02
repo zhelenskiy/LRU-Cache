@@ -1,8 +1,14 @@
+import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
 class LruCacheTest {
     @Test
-    fun `Instance test`() {
-        LruCache<Int, Unit>(0U) { }
+    fun `Evaluation test`() {
+        fun realFunction(value: Int) = value * 2
+        for (cacheSize in 0U..10U) {
+            val cachedFunction = LruCache(cacheSize, ::realFunction)
+            for (argument in -10..10)
+                assertThat(cachedFunction(argument)).isEqualTo(realFunction(argument))
+        }
     }
 }
