@@ -1,7 +1,7 @@
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
-class LruCacheTest {
+class LruCacheTests {
     @Test
     fun `Evaluation test`() {
         fun realFunction(value: Int) = value * 2
