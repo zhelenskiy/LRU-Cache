@@ -15,6 +15,6 @@ dependencies {
     testImplementation("com.google.truth:truth:1.1.3")
 }
 
-tasks.withType<KotlinCompile>() {
+tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
