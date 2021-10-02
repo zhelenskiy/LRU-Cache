@@ -17,4 +17,17 @@ class LinkedListNodeTests {
         assertThat(makeReversedList(10)).containsExactlyElementsIn(9 downTo 0)
         assertThat(makeList(10)!!.next).containsExactlyElementsIn(1..9)
     }
+
+    @Test
+    fun `Removing elements`() {
+        val size = 20
+        for (i in 0 until size) {
+            val nodes = generateSequence(makeList(size)) { it.next }.toList()
+            nodes[i].remove()
+            if (i == 0)
+                assertThat(nodes[0]).hasSize(1)
+            else
+                assertThat(nodes[0]).containsExactlyElementsIn((0 until size) - i)
+        }
+    }
 }
