@@ -23,7 +23,7 @@ class LinkedListNodeTests {
         val size = 20
         for (i in 0 until size) {
             val nodes = generateSequence(makeList(size)) { it.next }.toList()
-            nodes[i].remove()
+            assertThat(nodes[i].remove()).isEqualTo(i)
             if (i == 0)
                 assertThat(nodes[0]).hasSize(1)
             else

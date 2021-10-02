@@ -38,7 +38,7 @@ class LinkedListNode<E> private constructor(
         }
     }
 
-    fun remove() {
+    fun remove(): E {
         val oldPrevious = this.previous
         val oldNext = this.next
         validatePair(oldPrevious, this)
@@ -50,5 +50,6 @@ class LinkedListNode<E> private constructor(
         validatePair(oldPrevious, oldNext)
         validatePair(null, this)
         validatePair(this, null)
+        return value
     }
 }
