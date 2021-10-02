@@ -1,4 +1,7 @@
-class LruCache<K, V>(val size: UInt, val evaluator: (K) -> V): (K) -> V {
+class LruCache<K, V>(val size: Int, val evaluator: (K) -> V): (K) -> V {
+    init {
+        require(size >= 0)
+    }
     override operator fun invoke(key: K): V {
         return evaluator(key)
     }
